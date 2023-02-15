@@ -22,6 +22,6 @@ class DocumentResponse(BaseModel):
 
 
 class DocumentCreate(BaseModel):
-    wiki_id: int
+    wiki: int
     title: constr(max_length=50)
     content: str

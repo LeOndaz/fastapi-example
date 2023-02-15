@@ -1,4 +1,7 @@
+import sqlite3
+
 from sqlalchemy import select
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from models import Wiki
@@ -17,4 +20,9 @@ def create_wiki(db: Session, data: WikiCreate):
 
 
 def get_wiki_by_id(db: Session, id: int):
-    return db.get(Wiki, id)
+    wiki = db.get(Wiki, id)
+
+    if wiki is None:
+        raise NoResultFound
+
+    return wiki

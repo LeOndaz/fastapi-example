@@ -72,7 +72,7 @@ async def get_revision(
     return revision_to_pydantic(revision)
 
 
-@router.get("/document/{title}/latest", tags=["documents"])
+@router.get("/documents/{title}/latest", tags=["documents"])
 async def get_latest(
     title: str, db: Session = Depends(get_db)
 ) -> DocumentRevisionResponse:
@@ -84,7 +84,7 @@ async def get_latest(
     return revision_to_pydantic(revision)
 
 
-@router.post("/document/{title}", tags=["documents"])
+@router.post("/documents/{title}", tags=["documents"])
 async def create_revision(
     title: str, data: DocumentRevisionCreate, db: Session = Depends(get_db)
 ) -> DocumentRevisionResponse:
@@ -92,5 +92,10 @@ async def create_revision(
     Creates a new revision for a document by its id
     """
 
-    revision = document_controller.create_revision(db, title, data)
+    try:
+        revision = document_controller.create_revision(db, title, data)
+    except NoResultFound:
+        raise HTTPException(
+            status_code=401, detail="Document with title={} was not found".format(title)
+        )
     return revision_to_pydantic(revision)

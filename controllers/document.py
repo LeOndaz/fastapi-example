@@ -10,9 +10,7 @@ from models import Document
 from models.document import DocumentRevision
 from schemas.document import (
     DocumentCreate,
-    DocumentResponse,
     DocumentRevisionCreate,
-    DocumentRevisionResponse,
 )
 
 from .wiki import get_wiki_by_id
@@ -20,21 +18,20 @@ from .wiki import get_wiki_by_id
 
 def create_document(db: Session, data: DocumentCreate) -> Document:
     try:
-        wiki = get_wiki_by_id(db, data.wiki_id)
+        wiki = get_wiki_by_id(db, data.wiki)
     except NoResultFound:
         raise HTTPException(
-            status_code=404, detail="Wiki with id={} was not found".format(data.wiki_id)
+            status_code=404, detail="Wiki with id={} was not found".format(data.wiki)
         )
-
-    content = data.content
 
     document = Document(
         title=data.title,
-        wiki=wiki,
+        wiki_id=wiki.id,
     )
     db.add(document)
     db.flush()
 
+    content = data.content
     default_revision = DocumentRevision(content=content, document_id=document.id)
 
     db.add(default_revision)
