@@ -31,9 +31,11 @@ def init_data(clean_db, db):
 
     for i in range(50):
         document = Document(title="Document {}".format(i + 1), wiki=wiki)
-        revision = DocumentRevision(content="Content {}".format(i + 1))
 
-        document.revisions.add(revision)
+        for j in range(10):
+            revision = DocumentRevision(content="Content {}".format(j + 1))
+            document.revisions.add(revision)
+
         db.add(document)
 
     db.commit()

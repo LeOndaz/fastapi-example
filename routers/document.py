@@ -49,6 +49,18 @@ async def get_revisions(
     return list(map(revision_to_pydantic, document.revisions))
 
 
+@router.get("/documents/{title}/latest", tags=["documents"])
+async def get_latest(
+    title: str, db: Session = Depends(get_db)
+) -> DocumentRevisionResponse:
+    """
+    Returns the latest revision of a specific document by its id
+    """
+    document = get_document_or_404(db, title)
+    revision = document_controller.get_latest_revision(db, document)
+    return revision_to_pydantic(revision)
+
+
 @router.get("/documents/{title}/{timestamp}", tags=["documents"])
 async def get_revision(
     title: str, timestamp: str, db: Session = Depends(get_db)
@@ -69,18 +81,6 @@ async def get_revision(
                 timestamp=timestamp,
             ),
         )
-    return revision_to_pydantic(revision)
-
-
-@router.get("/documents/{title}/latest", tags=["documents"])
-async def get_latest(
-    title: str, db: Session = Depends(get_db)
-) -> DocumentRevisionResponse:
-    """
-    Returns the latest revision of a specific document by its id
-    """
-    document = get_document_or_404(db, title)
-    revision = document_controller.get_latest_revision(db, document)
     return revision_to_pydantic(revision)
 
 

@@ -1,4 +1,6 @@
 from . import client
+from models import Document, DocumentRevision
+from sqlalchemy import select
 
 
 def test_root_works():
@@ -54,3 +56,21 @@ def test_create_revision(init_data, clean_db, db):
     assert response.status_code == 200
     assert response.json()["document"] == 1
     assert response.json()["content"] == "Some revision"
+
+
+def test_get_latest_revision(init_data, clean_db, db):
+    response = client.get("/documents/Document 1/latest")
+
+    assert response.status_code == 200
+
+    stmt = (
+        select(DocumentRevision)
+        .join(Document)
+        .where(Document.title.is_("Document 1"))
+        .order_by(DocumentRevision.created_at.desc())
+    )
+
+    revisions = db.scalars(stmt).all()
+    latest_revision = revisions[0]
+
+    assert response.json()["id"] == latest_revision.id
