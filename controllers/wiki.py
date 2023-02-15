@@ -13,10 +13,7 @@ def create_wiki(db: Session, data: WikiCreate):
     db.add(wiki)
     db.commit()
 
-    return WikiResponse(
-        id=wiki.id,
-        name=wiki.name,
-    )
+    return wiki
 
 
 def get_wiki_by_id(db: Session, id: int):

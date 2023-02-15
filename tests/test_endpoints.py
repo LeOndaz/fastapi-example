@@ -1,6 +1,8 @@
-from . import client
-from models import Document, DocumentRevision
 from sqlalchemy import select
+
+from models import Document, DocumentRevision
+
+from . import client
 
 
 def test_root_works():
