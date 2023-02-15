@@ -1,6 +1,7 @@
 import pytest
-from db import get_db, engine
-from models import Document, DocumentRevision, Wiki, Base
+
+from db import engine, get_db
+from models import Base, Document, DocumentRevision, Wiki
 
 
 @pytest.fixture()

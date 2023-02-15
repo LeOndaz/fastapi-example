@@ -1,13 +1,12 @@
 import sqlite3
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from fastapi.routing import APIRouter
 from sqlalchemy.orm import Session
 
 import controllers.wiki as wiki_controllers
 from db import get_db
 from schemas.wiki import WikiCreate, WikiResponse
-from fastapi import Depends, HTTPException
 
 router = APIRouter()
 

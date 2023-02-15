@@ -8,10 +8,7 @@ from sqlalchemy.orm import Session
 
 from models import Document
 from models.document import DocumentRevision
-from schemas.document import (
-    DocumentCreate,
-    DocumentRevisionCreate,
-)
+from schemas.document import DocumentCreate, DocumentRevisionCreate
 
 from .wiki import get_wiki_by_id
 
